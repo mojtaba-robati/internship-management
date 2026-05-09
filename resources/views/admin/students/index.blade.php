@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت دانش آموزان</title>
+    
+    <!-- ========== فایل‌های محلی (اولویت اول) ========== -->
+    <!-- فونت شبنم محلی -->
+    <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
+    
+    <!-- Bootstrap محلی -->
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    
+    <!-- Bootstrap Icons محلی -->
+    @if(file_exists(public_path('assets/css/bootstrap-icons.min.css')))
+        <link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
+    @endif
+    
+    <!-- ========== فایل‌های CDN (پشتیبان) ========== -->
+    <!-- Bootstrap RTL از CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    
+    <!-- فونت وزیرمتن از CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.1/Vazirmatn-font-face.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons از CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Bootstrap JS از CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <style>
+        body {
+            background: #f5f6fa;
+            font-family: 'Shabnam', 'Vazirmatn', 'IRANSans', 'Tahoma', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .content-area {
+            margin-right: 240px;
+        }
+        
+        @media (min-width: 992px) {
+            .content-area {
+                margin-right: 240px;
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 991px) {
+            .content-area {
+                margin-right: 0;
+                padding: 15px;
+            }
+        }
+        
+        table td {
+            vertical-align: middle;
+        }
+        
+        .btn-outline-primary.active {
+            background-color: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+        
+        .btn-outline-secondary.active {
+            background-color: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+        
+        .input-group .btn {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .card {
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+@include('admin.components.sidebar')
+
+<div class="content-area">
+    <div class="container-fluid">
+        
+        {{-- هدر --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold">همه دانش آموزان</h3>
+            <a href="{{ route('students.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> افزودن دانش آموز
+            </a>
+        </div>
+        
+        {{-- بخش فیلتر --}}
+        @include('admin.students.partials.filter')
+        
+        {{-- بخش جدول --}}
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                @include('admin.students.partials.table')
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{{-- مودال حذف --}}
+@include('admin.students.partials.delete-modal')
+
+<script>
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const studentId = button.getAttribute('data-id');
+            const studentName = button.getAttribute('data-name');
+            const studentNameSpan = document.getElementById('studentName');
+            const deleteForm = document.getElementById('deleteForm');
+            
+            if (studentNameSpan) {
+                studentNameSpan.textContent = studentName;
+            }
+            if (deleteForm) {
+                deleteForm.action = `/admin/students/${studentId}`;
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
