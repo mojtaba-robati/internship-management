@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternshipRequest;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 
 class InternshipRequestController extends Controller

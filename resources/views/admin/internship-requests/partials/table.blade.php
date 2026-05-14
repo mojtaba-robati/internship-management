@@ -15,7 +15,7 @@
                         <th>تاریخ درخواست</th>
                         <th>وضعیت</th>
                         <th>دلیل رد</th>
-                        <th>عملیات</th>
+                        <th style="width: 150px;">عملیات</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,46 +50,44 @@
                         <td dir="ltr">{{ $req->created_at ? $req->created_at->format('Y/m/d H:i') : '-' }}</td>
                         <td>
                             @if($req->status == 'pending')
-                                <span class="badge bg-warning text-dark">در انتظار</span>
+                                <span class="badge bg-warning text-dark px-3 py-2">در انتظار</span>
                             @elseif($req->status == 'approved')
-                                <span class="badge bg-success">تایید شده</span>
+                                <span class="badge bg-success px-3 py-2">تایید شده</span>
                             @else
-                                <span class="badge bg-danger">رد شده</span>
+                                <span class="badge bg-danger px-3 py-2">رد شده</span>
                             @endif
                         </td>
                         <td>
                             @if($req->status == 'rejected' && $req->admin_notes)
                                 <span class="text-danger" title="{{ $req->admin_notes }}">
-                                    <i class="bi bi-chat-dots"></i> {{ Str::limit($req->admin_notes, 30) }}
+                                    {{ Str::limit($req->admin_notes, 30) }}
                                 </span>
                             @else
                                 <span class="text-muted">-</span>
                             @endif
                         </td>
-                        <td>
-                            <div class="btn-group" role="group">
+                        <td class="text-center">
+                            <div class="d-flex gap-2 justify-content-center flex-wrap">
                                 <a href="{{ route('admin.internship-requests.show', $req->id) }}" 
-                                   class="btn btn-sm btn-info" title="مشاهده">
-                                    <i class="bi bi-eye"></i>
+                                   class="btn btn-sm btn-info">
+                                    مشاهده
                                 </a>
                                 @if($req->status == 'pending')
                                     <button type="button" 
                                             class="btn btn-sm btn-success" 
-                                            title="تایید"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#quickApproveModal"
                                             data-id="{{ $req->id }}"
                                             data-name="{{ $req->student ? $req->student->first_name . ' ' . $req->student->last_name : 'کاربر حذف شده' }}">
-                                        <i class="bi bi-check-lg"></i>
+                                        تایید
                                     </button>
                                     <button type="button" 
                                             class="btn btn-sm btn-danger" 
-                                            title="رد"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#quickRejectModal"
                                             data-id="{{ $req->id }}"
                                             data-name="{{ $req->student ? $req->student->first_name . ' ' . $req->student->last_name : 'کاربر حذف شده' }}">
-                                        <i class="bi bi-x-lg"></i>
+                                        رد
                                     </button>
                                 @endif
                             </div>

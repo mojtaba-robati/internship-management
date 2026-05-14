@@ -23,22 +23,7 @@
         <script src="{{ asset('assets/js/chart.min.js') }}"></script>
     @endif
     
-    <!-- ========== فایل‌های CDN (پشتیبان) ========== -->
-    <!-- Bootstrap RTL از CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    
-    <!-- فونت وزیرمتن از CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.1/Vazirmatn-font-face.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons از CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <!-- Chart.js از CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Bootstrap JS از CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+ 
 
 </head>
 <body class="bg-primary bg-gradient" style="font-family: 'Vazirmatn', sans-serif;">

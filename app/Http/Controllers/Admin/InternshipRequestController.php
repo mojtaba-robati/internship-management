@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\InternshipRequest;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 
 class InternshipRequestController extends Controller
 {
     public function index(Request $request)
     {
+        // پاک کردن خودکار درخواست‌های بدون دانش‌آموز (ارواح)
+        InternshipRequest::whereDoesntHave('student')->delete();
+        
         $query = InternshipRequest::with('student');
         
         // فیلتر بر اساس وضعیت
@@ -76,9 +80,31 @@ class InternshipRequestController extends Controller
             'admin_notes' => $request->admin_notes,
             'reviewed_at' => now(),
         ]);
+        
+        // ========== ساخت 40 روز به صورت JSON ==========
+        $days = [];
+        $startDate = now();
+        
+        for ($i = 1; $i <= 40; $i++) {
+            $days[$i] = [
+                'row_number' => $i,
+                'date' => $startDate->copy()->addDays($i - 1)->format('Y-m-d'),
+                'check_in' => null,
+                'check_out' => null,
+                'status' => 'pending',
+                'mentor_note' => null,
+                'approved_at' => null,
+            ];
+        }
+        
+        Attendance::create([
+            'student_id' => $internshipRequest->student_id,
+            'internship_request_id' => $internshipRequest->id,
+            'days' => $days,
+        ]);
 
         return redirect()->route('admin.internship-requests.index')
-            ->with('success', 'درخواست کارآموزی دانش‌آموز ' . $internshipRequest->student->first_name . ' ' . $internshipRequest->student->last_name . ' تایید شد.');
+            ->with('success', 'درخواست کارآموزی دانش‌آموز ' . $internshipRequest->student->first_name . ' ' . $internshipRequest->student->last_name . ' تایید شد و دفترچه حضور غیاب 40 روزه ساخته شد.');
     }
 
     public function reject(Request $request, $id)
@@ -106,13 +132,17 @@ class InternshipRequestController extends Controller
     {
         $internshipRequest = InternshipRequest::findOrFail($id);
         $studentName = $internshipRequest->student->first_name . ' ' . $internshipRequest->student->last_name;
+        
+        // حذف ردیف‌های حضور غیاب مربوطه
+        Attendance::where('internship_request_id', $id)->delete();
+        
+        // حذف درخواست
         $internshipRequest->delete();
         
         return redirect()->route('admin.internship-requests.index')
-            ->with('success', 'درخواست کارآموزی ' . $studentName . ' حذف شد.');
+            ->with('success', 'درخواست کارآموزی ' . $studentName . ' و دفترچه حضور غیاب او حذف شد.');
     }
 
-    // ========== متد حذف گروهی (جدید) ==========
     public function bulkDelete(Request $request)
     {
         $ids = json_decode($request->ids, true);
@@ -122,9 +152,13 @@ class InternshipRequestController extends Controller
                 ->with('error', 'هیچ درخواستی انتخاب نشده است.');
         }
         
+        // حذف ردیف‌های حضور غیاب مربوطه
+        Attendance::whereIn('internship_request_id', $ids)->delete();
+        
+        // حذف درخواست‌ها
         $count = InternshipRequest::whereIn('id', $ids)->delete();
         
         return redirect()->route('admin.internship-requests.index')
-            ->with('success', $count . ' درخواست با موفقیت حذف شد.');
+            ->with('success', $count . ' درخواست و دفترچه حضور غیاب آنها با موفقیت حذف شد.');
     }
 }

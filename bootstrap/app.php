@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AdminAuth::class,
             'student.auth' => \App\Http\Middleware\StudentAuth::class,
+            'mentor.auth' => \App\Http\Middleware\MentorAuth::class, // 👈 این خط رو اضافه کن
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

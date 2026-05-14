@@ -5,11 +5,10 @@
         
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold">درخواست‌های کارآموزی</h2>
+                <h2 class="fw-bold">📋 درخواست‌های کارآموزی</h2>
                 <p class="text-muted">لیست درخواست‌های شما و وضعیت آنها</p>
             </div>
             
-            {{-- فقط اگر درخواست تایید شده یا pending نداشته باشه، دکمه نمایش داده بشه --}}
             @if(!$hasApprovedRequest && !$hasPendingRequest)
                 <a href="{{ route('student.internship-requests.create') }}" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i> درخواست جدید
@@ -35,7 +34,6 @@
             </div>
         @endif
 
-        {{-- پیام وضعیت --}}
         @if($hasApprovedRequest)
             <div class="alert alert-success">
                 <i class="bi bi-check-circle-fill"></i> 
@@ -63,32 +61,34 @@
                         </thead>
                         <tbody>
                             @forelse($requests as $index => $req)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $req->company_name }}</td>
-                                <td>{{ $req->created_at ? $req->created_at->format('Y/m/d') : '-' }}</td>
-                                <td>
-                                    @if($req->status == 'pending')
-                                        <span class="badge bg-warning text-dark">🕐 در انتظار بررسی</span>
-                                    @elseif($req->status == 'approved')
-                                        <span class="badge bg-success">✅ تایید شده</span>
-                                    @else
-                                        <span class="badge bg-danger">❌ رد شده</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('student.internship-requests.show', $req->id) }}" 
-                                       class="btn btn-sm btn-info">
-                                        <i class="bi bi-eye"></i> مشاهده
-                                    </a>
-                                    @if($req->status == 'rejected')
-                                        <a href="{{ route('student.internship-requests.create') }}" 
-                                           class="btn btn-sm btn-primary">
-                                            <i class="bi bi-plus-lg"></i> درخواست جدید
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $req->company_name }}</td>
+                                    <td>{{ $req->created_at ? $req->created_at->format('Y/m/d') : '-' }}</td>
+                                    <td>
+                                        @if($req->status == 'pending')
+                                            <span class="badge bg-warning text-dark">🕐 در انتظار بررسی</span>
+                                        @elseif($req->status == 'approved')
+                                            <span class="badge bg-success">✅ تایید شده</span>
+                                        @else
+                                            <span class="badge bg-danger">❌ رد شده</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                         <a href="{{ route('student.internship-requests.show', $req->id) }}" 
+   class="btn btn-sm btn-info" title="مشاهده">
+    <i class="bi bi-eye"></i> مشاهده
+</a>
+                                            @if($req->status == 'rejected')
+                                                <a href="{{ route('student.internship-requests.create') }}" 
+                                                   class="btn btn-sm btn-primary" title="درخواست جدید">
+                                                    <i class="bi bi-plus-lg"></i>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td colspan="5" class="text-center text-muted py-4">
@@ -133,6 +133,8 @@
     .alert {
         border-radius: 12px;
     }
+    
+    .btn-group {
+        gap: 5px;
+    }
 </style>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Student;
+use App\Models\InternshipRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -19,7 +20,7 @@ class StudentController extends Controller
             $query->where('grade', $request->grade);
         }
         
-        // فیلتر بر اساس رشته (جدید)
+        // فیلتر بر اساس رشته
         if ($request->has('major') && $request->major != '') {
             $query->where('major', $request->major);
         }
@@ -39,7 +40,7 @@ class StudentController extends Controller
         $count = $students->count();
         
         $selectedGrade = $request->grade;
-        $selectedMajor = $request->major;  // جدید
+        $selectedMajor = $request->major;
         $searchTerm = $request->search;
         
         return view('admin.students.index', compact('students', 'count', 'selectedGrade', 'selectedMajor', 'searchTerm'));
@@ -62,15 +63,15 @@ class StudentController extends Controller
         ]);
 
         Student::create([
-            'first_name'=>$request->first_name,
-            'last_name'=>$request->last_name,
-            'phone'=>$request->phone,
-            'national_code'=>$request->national_code,
-            'major'=>$request->major,
-            'grade'=>$request->grade,
-            'password'=>Hash::make($request->national_code),
-            'is_active'=>1,
-            'must_change_password'=>1,
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'phone'      => $request->phone,
+            'national_code' => $request->national_code,
+            'major'      => $request->major,
+            'grade'      => $request->grade,
+            'password'   => Hash::make($request->national_code),
+            'is_active'  => 1,
+            'must_change_password' => 1,
         ]);
 
         return redirect()->route('students.index')->with('success', 'دانش‌آموز با موفقیت اضافه شد.');
@@ -107,27 +108,50 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('success', 'دانش‌آموز با موفقیت ویرایش شد.');
     }
 
+    // حذف تکی دانش‌آموز (به همراه درخواست‌های کارآموزی)
     public function destroy($id)
     {
         $student = Student::findOrFail($id);
+        
+        // حذف تمام درخواست‌های کارآموزی این دانش‌آموز
+        InternshipRequest::where('student_id', $id)->delete();
+        
+        // حذف خود دانش‌آموز
         $student->delete();
         
-        return redirect()->route('students.index')->with('success', 'دانش‌آموز با موفقیت حذف شد.');
+        return redirect()->route('students.index')
+            ->with('success', 'دانش‌آموز و تمام درخواست‌های کارآموزی او با موفقیت حذف شدند.');
     }
 
+    // حذف گروهی بر اساس پایه (به همراه درخواست‌های کارآموزی)
     public function deleteByGrade($grade)
     {
-        $count = Student::where('grade', $grade)->count();
-        Student::where('grade', $grade)->delete();
+        // پیدا کردن همه دانش‌آموزان این پایه
+        $students = Student::where('grade', $grade)->get();
         
-        return redirect()->route('students.index')->with('success', $count . ' دانش‌آموز پایه ' . $grade . ' با موفقیت حذف شدند.');
+        // حذف درخواست‌های کارآموزی هر دانش‌آموز
+        foreach($students as $student) {
+            InternshipRequest::where('student_id', $student->id)->delete();
+        }
+        
+        // حذف خود دانش‌آموزان
+        $count = Student::where('grade', $grade)->delete();
+        
+        return redirect()->route('students.index')
+            ->with('success', $count . ' دانش‌آموز پایه ' . $grade . ' و تمام درخواست‌های کارآموزی آنها با موفقیت حذف شدند.');
     }
     
+    // حذف همه دانش‌آموزان (به همراه درخواست‌های کارآموزی)
     public function deleteAll()
     {
+        // حذف همه درخواست‌های کارآموزی
+        InternshipRequest::truncate();
+        
+        // حذف همه دانش‌آموزان
         $count = Student::count();
         Student::truncate();
         
-        return redirect()->route('students.index')->with('success', 'همه دانش‌آموزان (' . $count . ' نفر) با موفقیت حذف شدند.');
+        return redirect()->route('students.index')
+            ->with('success', 'همه دانش‌آموزان (' . $count . ' نفر) و تمام درخواست‌های کارآموزی آنها با موفقیت حذف شدند.');
     }
 }

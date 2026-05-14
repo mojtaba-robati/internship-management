@@ -4,22 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- ========== فایل‌های محلی (اولویت اول) ========== -->
-    <!-- فونت شبنم محلی -->
-    <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
+    <!-- ========== فایل‌های محلی ========== -->
+<!-- فونت شبنم محلی -->
+<link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
+
+<!-- Bootstrap محلی -->
+<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+
+<!-- Bootstrap Icons محلی -->
+<link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
+
+<!-- Bootstrap JS محلی -->
+<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     
-    <!-- Bootstrap محلی -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    
-    <!-- ========== فایل‌های CDN (پشتیبان) ========== -->
-    <!-- Bootstrap RTL از CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-    
-    <!-- فونت وزیرمتن از CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.1/Vazirmatn-font-face.css" rel="stylesheet">
-    
-    <!-- Bootstrap JS از CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ 
     
     <style>
         body {
@@ -129,6 +127,10 @@
                class="nav-link sidebar-link {{ request()->routeIs('student.internship-requests.*') ? 'active' : '' }}">
                 <i class="bi bi-envelope-paper-fill"></i>  درخواست کارآموزی
             </a>
+            <a href="{{ route('student.attendance.index') }}"
+   class="nav-link sidebar-link {{ request()->routeIs('student.attendance.*') ? 'active' : '' }}">
+    <i class="bi bi-calendar-check-fill"></i>  دفترچه حضور غیاب
+</a>
 
             <a href="#" class="nav-link sidebar-link">
                 <i class="bi bi-book-fill"></i>  دوره های من
@@ -155,8 +157,7 @@
     </div>
 </div>
 
-<!-- Bootstrap Icons از CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 
 <script>
     // فعال کردن خودکار آیتم فعال در منو
