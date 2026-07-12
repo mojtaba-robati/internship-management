@@ -12,34 +12,30 @@
 
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-header bg-white border-0 pt-4 pb-0">
-                <h5 class="fw-bold">اطلاعات شرکت</h5>
+                <h5 class="fw-bold">اطلاعات محل کارآموزی</h5>
             </div>
             <div class="card-body p-4">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label class="text-muted">نام شرکت:</label>
+                        <label class="text-muted">نام محل کارآموزی:</label>
                         <p class="fw-bold">{{ $internshipRequest->company_name }}</p>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="text-muted">تلفن شرکت:</label>
-                        <p class="fw-bold" dir="ltr">{{ $internshipRequest->company_phone }}</p>
+                        <label class="text-muted">تلفن محل کارآموزی:</label>
+                        <p class="fw-bold" dir="ltr">{{ $internshipRequest->company_phone ?: '-' }}</p>
                     </div>
                     <div class="col-12 mb-3">
-                        <label class="text-muted">آدرس شرکت:</label>
+                        <label class="text-muted">آدرس محل کارآموزی:</label>
                         <p class="fw-bold">{{ $internshipRequest->company_address }}</p>
                     </div>
-                    @if($internshipRequest->supervisor_name)
                     <div class="col-md-6 mb-3">
                         <label class="text-muted">نام سرپرست:</label>
-                        <p class="fw-bold">{{ $internshipRequest->supervisor_name }}</p>
+                        <p class="fw-bold">{{ $internshipRequest->supervisor_name ?: '-' }}</p>
                     </div>
-                    @endif
-                    @if($internshipRequest->supervisor_phone)
                     <div class="col-md-6 mb-3">
                         <label class="text-muted">تلفن سرپرست:</label>
-                        <p class="fw-bold" dir="ltr">{{ $internshipRequest->supervisor_phone }}</p>
+                        <p class="fw-bold" dir="ltr">{{ $internshipRequest->supervisor_phone ?: '-' }}</p>
                     </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -60,18 +56,14 @@
                         <p class="fw-bold">{{ $internshipRequest->skills }}</p>
                     </div>
                     @endif
-                    @if($internshipRequest->start_date)
                     <div class="col-md-6 mb-3">
                         <label class="text-muted">تاریخ شروع:</label>
-                        <p class="fw-bold">{{ $internshipRequest->start_date }}</p>
+                        <p class="fw-bold">{{ $internshipRequest->start_date ?: '-' }}</p>
                     </div>
-                    @endif
-                    @if($internshipRequest->end_date)
                     <div class="col-md-6 mb-3">
                         <label class="text-muted">تاریخ پایان:</label>
-                        <p class="fw-bold">{{ $internshipRequest->end_date }}</p>
+                        <p class="fw-bold">{{ $internshipRequest->end_date ?: '-' }}</p>
                     </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -86,11 +78,11 @@
                         <label class="text-muted">وضعیت:</label>
                         <p>
                             @if($internshipRequest->status == 'pending')
-                                <span class="badge bg-warning text-dark">در انتظار بررسی</span>
+                                <span class="badge bg-warning text-dark">🕐 در انتظار بررسی</span>
                             @elseif($internshipRequest->status == 'approved')
-                                <span class="badge bg-success">تایید شده</span>
+                                <span class="badge bg-success">✅ تایید شده</span>
                             @else
-                                <span class="badge bg-danger">رد شده</span>
+                                <span class="badge bg-danger">❌ رد شده</span>
                             @endif
                         </p>
                     </div>
@@ -111,6 +103,11 @@
         </div>
 
         <div class="mt-4 text-end">
+            @if($internshipRequest->status == 'rejected')
+                <a href="{{ route('student.internship-requests.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> ثبت درخواست جدید
+                </a>
+            @endif
             <a href="{{ route('student.internship-requests.index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-right"></i> بازگشت
             </a>
@@ -130,5 +127,12 @@
         .student-content-wrapper {
             margin-right: 0;
         }
+    }
+    .card {
+        border-radius: 15px;
+    }
+    .badge {
+        font-size: 14px;
+        padding: 6px 12px;
     }
 </style>

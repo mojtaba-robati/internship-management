@@ -15,6 +15,9 @@ use App\Http\Controllers\Admin\MentorAssignmentController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\StudentController as MentorStudentController;
 use App\Http\Controllers\Mentor\AttendanceController as MentorAttendanceController;
+use App\Http\Controllers\Mentor\WorkReportController as MentorWorkReportController;
+use App\Http\Controllers\Mentor\GradingController as MentorGradingController;  // اضافه شد
+use App\Http\Controllers\Student\WorkReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -87,12 +90,27 @@ Route::prefix('mentor')->middleware('mentor.auth')->name('mentor.')->group(funct
     Route::get('/students', [MentorStudentController::class, 'index'])->name('students.index');
     Route::get('/students/{id}', [MentorStudentController::class, 'show'])->name('students.show');
     
-    // حضور غیاب با قابلیت تایید/رد
+    // حضور غیاب
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('/', [MentorAttendanceController::class, 'index'])->name('index');
         Route::get('/{studentId}', [MentorAttendanceController::class, 'show'])->name('show');
         Route::put('/{attendanceId}/{row}/approve', [MentorAttendanceController::class, 'approve'])->name('approve');
         Route::put('/{attendanceId}/{row}/reject', [MentorAttendanceController::class, 'reject'])->name('reject');
+    });
+    
+    // گزارش کار مربی
+    Route::prefix('work-reports')->name('work-reports.')->group(function () {
+        Route::get('/', [MentorWorkReportController::class, 'index'])->name('index');
+        Route::get('/{studentId}', [MentorWorkReportController::class, 'show'])->name('show');
+        Route::put('/{id}/approve', [MentorWorkReportController::class, 'approve'])->name('approve');
+        Route::put('/{id}/reject', [MentorWorkReportController::class, 'reject'])->name('reject');
+    });
+    
+    // ========== نمره‌دهی مربی (اضافه شد) ==========
+    Route::prefix('grading')->name('grading.')->group(function () {
+        Route::get('/', [MentorGradingController::class, 'index'])->name('index');
+        Route::get('/{studentId}', [MentorGradingController::class, 'show'])->name('show');
+        Route::post('/{id}', [MentorGradingController::class, 'store'])->name('store');
     });
 });
 
@@ -104,7 +122,10 @@ Route::prefix('student')->middleware('student.auth')->name('student.')->group(fu
     Route::get('/courses', [StudentDashboardController::class, 'courses'])->name('courses');
     Route::get('/grades', [StudentDashboardController::class, 'grades'])->name('grades');
 
-    // دفترچه حضور غیاب (دانش آموز)
+    
+    Route::get('/grades', [StudentDashboardController::class, 'grades'])->name('grades.index');
+
+    // دفترچه حضور غیاب
     Route::prefix('attendance')->name('attendance.')->group(function () {
         Route::get('/', [AttendanceController::class, 'index'])->name('index');
         Route::post('/{id}/checkin', [AttendanceController::class, 'checkIn'])->name('checkin');
@@ -112,8 +133,15 @@ Route::prefix('student')->middleware('student.auth')->name('student.')->group(fu
         Route::put('/{id}', [AttendanceController::class, 'update'])->name('update');
     });
     
-    // درخواست‌های کارآموزی دانش آموز
+    // درخواست‌های کارآموزی
     Route::resource('internship-requests', InternshipRequestController::class);
+    
+    // گزارش کار (فقط ثبت و مشاهده، بدون ویرایش)
+    Route::prefix('work-reports')->name('work-reports.')->group(function () {
+        Route::get('/', [WorkReportController::class, 'index'])->name('index');
+        Route::get('/create/{row}', [WorkReportController::class, 'create'])->name('create');
+        Route::post('/store', [WorkReportController::class, 'store'])->name('store');
+    });
     
     Route::post('/logout', [StudentDashboardController::class, 'logout'])->name('logout');
 });

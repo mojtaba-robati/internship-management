@@ -5,19 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- ========== فایل‌های محلی ========== -->
-<!-- فونت شبنم محلی -->
-<link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
-
-<!-- Bootstrap محلی -->
-<link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-
-<!-- Bootstrap Icons محلی -->
-<link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
-
-<!-- Bootstrap JS محلی -->
-<script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
-    
- 
+    <link href="{{ asset('css/fonts.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     
     <style>
         body {
@@ -27,7 +18,6 @@
             background: #f5f6fa;
         }
         
-        /* لینک‌ها */
         .sidebar-link {
             color: #ccc;
             padding: 12px 20px;
@@ -44,7 +34,6 @@
             color: #fff;
         }
 
-        /* فقط یک خط نازک در سمت راست آیتم فعال */
         .sidebar-link.active {
             background-color: transparent;
             color: #fff !important;
@@ -52,7 +41,6 @@
             font-weight: 500;
         }
 
-        /* در دسکتاپ ثابت باشد */
         @media (min-width: 992px) {
             #studentSidebar {
                 position: fixed;
@@ -63,11 +51,9 @@
                 transform: none !important;
                 visibility: visible !important;
             }
-
             .student-content-wrapper {
                 margin-right: 240px;
             }
-
             .btn[data-bs-target="#studentSidebar"] {
                 display: none;
             }
@@ -127,17 +113,25 @@
                class="nav-link sidebar-link {{ request()->routeIs('student.internship-requests.*') ? 'active' : '' }}">
                 <i class="bi bi-envelope-paper-fill"></i>  درخواست کارآموزی
             </a>
-            <a href="{{ route('student.attendance.index') }}"
-   class="nav-link sidebar-link {{ request()->routeIs('student.attendance.*') ? 'active' : '' }}">
-    <i class="bi bi-calendar-check-fill"></i>  دفترچه حضور غیاب
-</a>
 
-            <a href="#" class="nav-link sidebar-link">
-                <i class="bi bi-book-fill"></i>  دوره های من
+            <a href="{{ route('student.attendance.index') }}"
+               class="nav-link sidebar-link {{ request()->routeIs('student.attendance.*') ? 'active' : '' }}">
+                <i class="bi bi-calendar-check-fill"></i>  دفترچه حضور غیاب
+            </a>
+
+            <a href="{{ route('student.work-reports.index') }}"
+               class="nav-link sidebar-link {{ request()->routeIs('student.work-reports.*') ? 'active' : '' }}">
+                <i class="bi bi-file-text-fill"></i>  گزارش کار
+            </a>
+
+            {{-- ========== نمرات من (اضافه شد) ========== --}}
+            <a href="{{ route('student.grades.index') }}"
+               class="nav-link sidebar-link {{ request()->routeIs('student.grades.*') ? 'active' : '' }}">
+                <i class="bi bi-star-fill"></i>  نمرات من
             </a>
 
             <a href="#" class="nav-link sidebar-link">
-                <i class="bi bi-star-fill"></i>  نمرات من
+                <i class="bi bi-book-fill"></i>  دوره های من
             </a>
 
             <hr class="text-secondary mx-3 my-2">
@@ -157,10 +151,7 @@
     </div>
 </div>
 
-
-
 <script>
-    // فعال کردن خودکار آیتم فعال در منو
     document.addEventListener('DOMContentLoaded', function() {
         const currentUrl = window.location.pathname;
         const links = document.querySelectorAll('.sidebar-link');

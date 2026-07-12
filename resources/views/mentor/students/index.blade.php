@@ -65,8 +65,8 @@
                                         <a href="{{ route('mentor.students.show', $student->id) }}" class="btn btn-sm btn-primary" title="مشاهده جزئیات">
                                             <i class="bi bi-person-badge"></i> جزئیات
                                         </a>
-                                        <a href="{{ route('mentor.attendance.show', $student->id) }}" class="btn btn-sm btn-info" title="دفترچه حضور غیاب">
-                                            <i class="bi bi-calendar-check"></i> دفترچه
+                                        <a href="{{ route('mentor.work-reports.show', $student->id) }}" class="btn btn-sm btn-info" title="گزارش کار">
+                                            <i class="bi bi-file-text-fill"></i> گزارش کار
                                         </a>
                                     </div>
                                 </td>

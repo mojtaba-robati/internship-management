@@ -169,6 +169,34 @@
                 </a>
             </div>
 
+            <!-- ========== گزارش کار ========== -->
+            <div class="menu-item sidebar-link" onclick="toggleSubmenu('workReportsSubmenu')">
+                <span class="menu-title">
+                    <i class="bi bi-file-text-fill"></i>  گزارش کار
+                </span>
+                <i class="bi bi-chevron-down dropdown-icon" id="workReportsIcon"></i>
+            </div>
+            <div id="workReportsSubmenu" class="submenu">
+                <a href="{{ route('mentor.work-reports.index') }}"
+                   class="nav-link sidebar-link {{ request()->routeIs('mentor.work-reports.index') ? 'active' : '' }}">
+                    <i class="bi bi-list-ul"></i>  لیست گزارش‌ها
+                </a>
+            </div>
+
+            <!-- ========== نمره‌دهی ========== -->
+            <div class="menu-item sidebar-link" onclick="toggleSubmenu('gradingSubmenu')">
+                <span class="menu-title">
+                    <i class="bi bi-star-fill"></i>  نمره‌دهی
+                </span>
+                <i class="bi bi-chevron-down dropdown-icon" id="gradingIcon"></i>
+            </div>
+            <div id="gradingSubmenu" class="submenu">
+                <a href="{{ route('mentor.grading.index') }}"
+                   class="nav-link sidebar-link {{ request()->routeIs('mentor.grading.*') ? 'active' : '' }}">
+                    <i class="bi bi-list-ul"></i>  لیست دانش‌آموزان
+                </a>
+            </div>
+
             <!-- ========== حضور غیاب ========== -->
             <div class="menu-item sidebar-link" onclick="toggleSubmenu('attendanceSubmenu')">
                 <span class="menu-title">
@@ -222,6 +250,16 @@
         if (currentUrl.includes('/mentor/students')) {
             document.getElementById('studentsSubmenu')?.classList.add('show');
             document.getElementById('studentsIcon')?.classList.add('rotated');
+        }
+        
+        if (currentUrl.includes('/mentor/work-reports')) {
+            document.getElementById('workReportsSubmenu')?.classList.add('show');
+            document.getElementById('workReportsIcon')?.classList.add('rotated');
+        }
+        
+        if (currentUrl.includes('/mentor/grading')) {
+            document.getElementById('gradingSubmenu')?.classList.add('show');
+            document.getElementById('gradingIcon')?.classList.add('rotated');
         }
         
         if (currentUrl.includes('/mentor/attendance')) {

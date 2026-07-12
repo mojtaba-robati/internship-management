@@ -7,7 +7,7 @@
             <div class="col">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h2 class="fw-bold">📋 دفترچه حضور غیاب</h2>
+                        <h2 class="fw-bold">دفترچه حضور غیاب</h2>
                         <p class="text-muted">
                             دانش‌آموز: {{ $student->first_name }} {{ $student->last_name }} |
                             محل کارآموزی: {{ $internshipRequest->company_name ?? '-' }}

@@ -61,12 +61,13 @@ class InternshipRequestController extends Controller
                 ->with('error', 'شما قبلاً یک درخواست فعال دارید.');
         }
         
+        // اعتبارسنجی اصلاح شده
         $request->validate([
             'company_name' => 'required|string|max:255',
             'company_address' => 'required|string',
-            'company_phone' => 'required|regex:/^09[0-9]{9}$/',
-            'supervisor_name' => 'nullable|string|max:255',
-            'supervisor_phone' => 'nullable|regex:/^09[0-9]{9}$/',
+            'company_phone' => 'nullable|string',  // اختیاری و بدون محدودیت
+            'supervisor_name' => 'required|string|max:255',
+            'supervisor_phone' => 'required|string',  // اجباری ولی بدون محدودیت
             'description' => 'required|string',
             'skills' => 'nullable|string',
             'start_date' => 'nullable|date',

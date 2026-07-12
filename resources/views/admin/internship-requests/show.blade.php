@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        {{-- اطلاعات دانش‌آموز و شرکت در دو ستون --}}
+        {{-- اطلاعات دانش‌آموز و محل کارآموزی در دو ستون --}}
         <div class="row">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -57,17 +57,17 @@
             <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header bg-white">
-                        <h5>اطلاعات شرکت</h5>
+                        <h5>اطلاعات محل کارآموزی</h5>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
                             <tr>
-                                <th style="width: 35%">نام شرکت:</th>
+                                <th style="width: 35%">نام محل کارآموزی:</th>
                                 <td>{{ $internshipRequest->company_name }}</td>
                             </tr>
                             <tr>
-                                <th>تلفن شرکت:</th>
-                                <td dir="ltr">{{ $internshipRequest->company_phone }}</td>
+                                <th>تلفن محل کارآموزی:</th>
+                                <td dir="ltr">{{ $internshipRequest->company_phone ?: '-' }}</td>
                             </tr>
                             <tr>
                                 <th>آدرس:</th>
@@ -82,7 +82,7 @@
                             @if($internshipRequest->supervisor_phone)
                             <tr>
                                 <th>تلفن سرپرست:</th>
-                                <td dir="ltr">{{ $internshipRequest->supervisor_phone }}</td>
+                                <td dir="ltr">{{ $internshipRequest->supervisor_phone ?: '-' }}</td>
                             </tr>
                             @endif
                         </table>

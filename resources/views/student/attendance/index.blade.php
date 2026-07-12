@@ -7,9 +7,9 @@
         
         <div class="row mb-4">
             <div class="col text-end">
-                <h2 class="fw-bold text-primary">📋 دفترچه حضور غیاب کارآموزی</h2>
+                <h2 class="fw-bold text-primary">دفترچه حضور غیاب کارآموزی</h2>
                 <p class="text-muted">
-                    <i class="bi bi-building"></i> شرکت: <strong>{{ $internshipRequest->company_name }}</strong>
+                    <i class="bi bi-building"></i> محل کارآموزی: <strong>{{ $internshipRequest->company_name }}</strong>
                 </p>
             </div>
         </div>
@@ -31,7 +31,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th style="width: 60px;">#</th>
-                                <th style="width: 150px;">تاریخ</th>
+                                <th style="width: 170px;">تاریخ</th>
                                 <th style="width: 140px;">ساعت ورود</th>
                                 <th style="width: 140px;">ساعت خروج</th>
                                 <th style="width: 120px;">وضعیت</th>
@@ -44,9 +44,15 @@
                                 <td class="fw-bold bg-light">{{ $row }}</td>
                                 <td>
                                     @if($day['status'] == 'pending')
-                                        <input type="date" class="form-control form-control-sm date-field mb-1" 
-                                               value="{{ $day['date'] ?? '' }}">
-                                        <small class="text-muted d-block">شمسی: {{ $day['date_fa'] ?? '-' }}</small>
+                                        @php
+                                            // محاسبه تاریخ روزها بر اساس شروع از اول تیر ماه با استفاده از پکیج مورپلاگ
+                                            // $row - 1 روز به اول تیر اضافه می‌کند تا ردیف‌ها به ترتیب جلو بروند
+                                            $currentYear = \Morilog\Jalali\Jalalian::now()->getYear();
+                                            $calculatedDate = \Morilog\Jalali\Jalalian::fromFormat('Y/m/d', "{$currentYear}/04/01")->addDays($row - 1)->format('Y/m/d');
+                                        @endphp
+                                        <input type="text" class="form-control form-control-sm date-field text-center mb-1" 
+                                               value="{{ $day['date_fa'] ?? $calculatedDate }}" 
+                                               placeholder="YYYY/MM/DD" autocomplete="off">
                                     @else
                                         <span class="fw-bold text-dark">{{ $day['date_fa'] ?? $day['date'] ?? '-' }}</span>
                                     @endif
@@ -123,7 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 check_out: rowElement.querySelector('.time-out')?.value
             };
 
-            // غیرفعال کردن دکمه هنگام ارسال
             this.disabled = true;
             this.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
 
@@ -139,18 +144,18 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(res => {
                 if (res.success) {
-                    location.reload(); // برای اعمال تغییرات و نمایش وضعیت جدید
+                    location.reload(); 
                 } else {
                     alert(res.message || 'خطا در ذخیره اطلاعات');
                     this.disabled = false;
-                    this.innerHTML = '<i class="bi bi-save"></i> ذخیره';
+                    this.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> ثبت';
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('خطا در ارتباط با سرور!');
                 this.disabled = false;
-                this.innerHTML = '<i class="bi bi-save"></i> ذخیره';
+                this.innerHTML = '<i class="bi bi-cloud-arrow-up"></i> ثبت';
             });
         });
     });
