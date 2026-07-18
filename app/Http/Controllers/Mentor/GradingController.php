@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\FinalGrade;
 use App\Models\InternshipRequest;
+use App\Models\WorkReport;
 use Illuminate\Http\Request;
 
 class GradingController extends Controller
@@ -65,7 +66,13 @@ class GradingController extends Controller
             ->where('internship_request_id', $internshipRequest->id ?? 0)
             ->first();
         
-        return view('mentor.grading.show', compact('student', 'internshipRequest', 'finalGrade'));
+        // گرفتن گزارش‌های کار دانش‌آموز برای نمایش در کارنامه
+        $reports = WorkReport::where('student_id', $studentId)
+            ->where('status', 'approved')
+            ->orderBy('row_number')
+            ->get();
+        
+        return view('mentor.grading.show', compact('student', 'internshipRequest', 'finalGrade', 'reports'));
     }
     
     // ذخیره نمره نهایی
@@ -95,6 +102,7 @@ class GradingController extends Controller
                 'mentor_id' => $mentorId,
                 'grade' => $request->grade,
                 'mentor_note' => $request->mentor_note,
+                'is_completed' => true,
             ]
         );
         

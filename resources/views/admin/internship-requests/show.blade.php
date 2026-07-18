@@ -20,7 +20,7 @@
             </div>
         @endif
 
-        {{-- اطلاعات دانش‌آموز و محل کارآموزی در دو ستون --}}
+        {{-- اطلاعات دانش‌آموز و شرکت در دو ستون --}}
         <div class="row">
             <div class="col-md-6">
                 <div class="card mb-4">
@@ -125,7 +125,6 @@
         </div>
 
         {{-- اقدامات --}}
-        @if($internshipRequest->status == 'pending')
         <div class="card">
             <div class="card-header bg-white">
                 <h5>اقدام مورد نظر</h5>
@@ -139,47 +138,59 @@
                                 <label class="form-label">یادداشت (اختیاری)</label>
                                 <textarea name="admin_notes" class="form-control" rows="3" placeholder="در صورت تمایل یادداشتی اضافه کنید..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-success w-100">تایید درخواست</button>
+                            <button type="submit" class="btn btn-success w-100" 
+                                    {{ $internshipRequest->status == 'approved' ? 'disabled' : '' }}>
+                                <i class="bi bi-check-circle"></i> تایید درخواست
+                            </button>
                         </form>
                     </div>
                     <div class="col-md-6">
                         <form action="{{ route('admin.internship-requests.reject', $internshipRequest->id) }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label text-danger">دلیل رد</label>
-                                <textarea name="admin_notes" class="form-control" rows="3" required placeholder="لطفاً دلیل رد درخواست را وارد کنید..."></textarea>
+                                <label class="form-label text-danger">دلیل رد (اختیاری)</label>
+                                <textarea name="admin_notes" class="form-control" rows="3" placeholder="در صورت تمایل دلیل رد را وارد کنید..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-danger w-100">رد درخواست</button>
+                            <button type="submit" class="btn btn-danger w-100"
+                                    {{ $internshipRequest->status == 'rejected' ? 'disabled' : '' }}>
+                                <i class="bi bi-x-circle"></i> رد درخواست
+                            </button>
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-        @else
-        <div class="card">
-            <div class="card-body text-center">
-                @if($internshipRequest->status == 'approved')
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle-fill fs-3"></i>
-                        <h5 class="mt-2">این درخواست تایید شده است</h5>
+                
+                {{-- نمایش وضعیت فعلی --}}
+                <div class="mt-3 text-center">
+                    <span class="text-muted">وضعیت فعلی: </span>
+                    @if($internshipRequest->status == 'pending')
+                        <span class="badge bg-warning text-dark">در انتظار بررسی</span>
+                    @elseif($internshipRequest->status == 'approved')
+                        <span class="badge bg-success">تایید شده</span>
                         @if($internshipRequest->admin_notes)
-                            <p><strong>یادداشت:</strong> {{ $internshipRequest->admin_notes }}</p>
+                            <br><small class="text-muted">یادداشت: {{ $internshipRequest->admin_notes }}</small>
                         @endif
-                        <small>تاریخ بررسی: {{ $internshipRequest->reviewed_at }}</small>
-                    </div>
-                @else
-                    <div class="alert alert-danger">
-                        <i class="bi bi-x-circle-fill fs-3"></i>
-                        <h5 class="mt-2">این درخواست رد شده است</h5>
+                    @else
+                        <span class="badge bg-danger">رد شده</span>
                         @if($internshipRequest->admin_notes)
-                            <p><strong>دلیل رد:</strong> {{ $internshipRequest->admin_notes }}</p>
+                            <br><small class="text-muted">دلیل رد: {{ $internshipRequest->admin_notes }}</small>
                         @endif
-                        <small>تاریخ بررسی: {{ $internshipRequest->reviewed_at }}</small>
-                    </div>
+                    @endif
+                </div>
+                
+                {{-- دکمه بازنشانی به حالت در انتظار (برای تغییر مجدد) --}}
+                @if($internshipRequest->status != 'pending')
+                <div class="text-center mt-3">
+                    <form action="{{ route('admin.internship-requests.reset', $internshipRequest->id) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('آیا از بازنشانی این درخواست مطمئن هستید؟')">
+                            <i class="bi bi-arrow-counterclockwise"></i> بازنشانی به حالت در انتظار
+                        </button>
+                    </form>
+                </div>
                 @endif
             </div>
         </div>
-        @endif
 
         <div class="mt-4 text-end">
             <a href="{{ route('admin.internship-requests.index') }}" class="btn btn-secondary">بازگشت به لیست</a>
@@ -219,5 +230,9 @@
     }
     .table-bordered th {
         background-color: #f8f9fa;
+    }
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 </style>

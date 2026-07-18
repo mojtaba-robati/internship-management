@@ -41,6 +41,103 @@
             font-weight: 500;
         }
 
+        /* ========== استایل ویژه راهنمای کارآموزی ========== */
+        .sidebar-link.guide-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff !important;
+            border-radius: 10px;
+            margin: 4px 12px;
+            padding: 12px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link.guide-link::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        .sidebar-link.guide-link:hover {
+            transform: translateX(-5px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar-link.guide-link i {
+            font-size: 1.2rem;
+            margin-left: 10px;
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .sidebar-link.guide-link .guide-badge {
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            background: #f6c23e;
+            color: #1a1a2e;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .sidebar-link.guide-link .guide-arrow {
+            display: inline-block;
+            margin-right: 5px;
+            animation: move-arrow 1.5s infinite;
+        }
+
+        @keyframes move-arrow {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+        }
+
+        .sidebar-link.guide-link.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 20px rgba(245, 87, 108, 0.5);
+        }
+
         @media (min-width: 992px) {
             #studentSidebar {
                 position: fixed;
@@ -62,6 +159,9 @@
         @media (max-width: 991px) {
             .student-content-wrapper {
                 margin-right: 0;
+            }
+            .sidebar-link.guide-link {
+                margin: 4px 8px;
             }
         }
     </style>
@@ -124,14 +224,18 @@
                 <i class="bi bi-file-text-fill"></i>  گزارش کار
             </a>
 
-            {{-- ========== نمرات من (اضافه شد) ========== --}}
             <a href="{{ route('student.grades.index') }}"
                class="nav-link sidebar-link {{ request()->routeIs('student.grades.*') ? 'active' : '' }}">
                 <i class="bi bi-star-fill"></i>  نمرات من
             </a>
 
-            <a href="#" class="nav-link sidebar-link">
-                <i class="bi bi-book-fill"></i>  دوره های من
+            {{-- ========== راهنمای کارآموزی (با استایل ویژه) ========== --}}
+            <a href="{{ route('student.guide.index') }}"
+               class="nav-link sidebar-link guide-link {{ request()->routeIs('student.guide.*') ? 'active' : '' }}">
+                <span class="guide-badge">جدید</span>
+                <i class="bi bi-question-circle-fill"></i>
+                راهنمای کارآموزی
+                <span class="guide-arrow">→</span>
             </a>
 
             <hr class="text-secondary mx-3 my-2">

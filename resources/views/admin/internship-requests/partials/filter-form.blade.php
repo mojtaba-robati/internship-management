@@ -15,13 +15,11 @@
                 <label class="form-label">فیلتر بر اساس رشته</label>
                 <select name="major" class="form-select">
                     <option value="">همه رشته‌ها</option>
-                    <option value="کامپیوتر" {{ request('major') == 'کامپیوتر' ? 'selected' : '' }}>کامپیوتر</option>
+                    <option value="شبکه و نرم افزار" {{ request('major') == 'شبکه و نرم افزار' ? 'selected' : '' }}>شبکه و نرم افزار</option>
                     <option value="تاسیسات" {{ request('major') == 'تاسیسات' ? 'selected' : '' }}>تاسیسات</option>
-                    <option value="مکانیک" {{ request('major') == 'مکانیک' ? 'selected' : '' }}>مکانیک</option>
-                    <option value="برق" {{ request('major') == 'برق' ? 'selected' : '' }}>برق</option>
-                    <option value="معماری" {{ request('major') == 'معماری' ? 'selected' : '' }}>معماری</option>
-                    <option value="گرافیک" {{ request('major') == 'گرافیک' ? 'selected' : '' }}>گرافیک</option>
-                    <option value="حسابداری" {{ request('major') == 'حسابداری' ? 'selected' : '' }}>حسابداری</option>
+                    <option value="مکانیک خودرو" {{ request('major') == 'مکانیک خودرو' ? 'selected' : '' }}>مکانیک خودرو</option>
+                    <option value="الکتروتکنیک" {{ request('major') == 'الکتروتکنیک' ? 'selected' : '' }}>الکتروتکنیک</option>
+                    <option value="تاسیسات مکانیکی" {{ request('major') == 'تاسیسات مکانیکی' ? 'selected' : '' }}>تاسیسات مکانیکی</option>
                 </select>
             </div>
             

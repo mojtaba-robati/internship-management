@@ -211,11 +211,7 @@
                 </a>
             </div>
 
-            <!-- راهنما -->
-            <a href="#" class="nav-link sidebar-link">
-                <i class="bi bi-question-circle-fill"></i>  راهنما
-            </a>
-
+          
             <hr class="text-secondary mx-3 my-2">
 
             <!-- خروج -->

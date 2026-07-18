@@ -239,10 +239,7 @@
                 </a>
             @endif
 
-            <!-- گزارش ها -->
-            <a href="#" class="nav-link sidebar-link">
-                <i class="bi bi-graph-up"></i>  گزارش ها
-            </a>
+          
 
             <hr class="text-secondary mx-3 my-2">
 

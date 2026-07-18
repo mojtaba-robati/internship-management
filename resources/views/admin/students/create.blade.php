@@ -17,8 +17,6 @@
         <link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
     @endif
     
- 
-    
     <style>
         body {
             background: #f5f6fa;
@@ -186,13 +184,11 @@
                             </label>
                             <select name="major" class="form-select" required>
                                 <option value="">انتخاب کنید</option>
-                                <option value="کامپیوتر">کامپیوتر</option>
+                                <option value="شبکه و نرم افزار">شبکه و نرم افزار</option>
                                 <option value="تاسیسات">تاسیسات</option>
-                                <option value="مکانیک">مکانیک</option>
-                                <option value="برق">برق</option>
-                                <option value="معماری">معماری</option>
-                                <option value="گرافیک">گرافیک</option>
-                                <option value="حسابداری">حسابداری</option>
+                                <option value="مکانیک خودرو">مکانیک خودرو</option>
+                                <option value="الکتروتکنیک">الکتروتکنیک</option>
+                                <option value="تاسیسات مکانیکی">تاسیسات مکانیکی</option>
                             </select>
                             <div class="invalid-feedback">لطفاً رشته را انتخاب کنید</div>
                         </div>

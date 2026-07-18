@@ -112,10 +112,7 @@ class InternshipRequestController extends Controller
         $internshipRequest = InternshipRequest::findOrFail($id);
         
         $request->validate([
-            'admin_notes' => 'required|string|min:10',
-        ], [
-            'admin_notes.required' => 'لطفاً دلیل رد درخواست را وارد کنید.',
-            'admin_notes.min' => 'دلیل رد درخواست باید حداقل 10 کاراکتر باشد.',
+            'admin_notes' => 'nullable|string',
         ]);
         
         $internshipRequest->update([
@@ -126,6 +123,20 @@ class InternshipRequestController extends Controller
 
         return redirect()->route('admin.internship-requests.index')
             ->with('success', 'درخواست کارآموزی دانش‌آموز ' . $internshipRequest->student->first_name . ' ' . $internshipRequest->student->last_name . ' رد شد.');
+    }
+
+    public function reset($id)
+    {
+        $internshipRequest = InternshipRequest::findOrFail($id);
+        
+        $internshipRequest->update([
+            'status' => 'pending',
+            'admin_notes' => null,
+            'reviewed_at' => null,
+        ]);
+        
+        return redirect()->route('admin.internship-requests.show', $id)
+            ->with('success', 'درخواست به حالت "در انتظار بررسی" بازنشانی شد.');
     }
 
     public function destroy($id)

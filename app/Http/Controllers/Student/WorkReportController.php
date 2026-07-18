@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\WorkReport;
 use App\Models\InternshipRequest;
 use App\Models\Attendance;
+use App\Models\FinalGrade;  // 👈 اضافه کن
 use Illuminate\Http\Request;
 use Morilog\Jalali\Jalalian;
 
@@ -45,6 +46,16 @@ class WorkReportController extends Controller
     {
         $studentId = session('student_id');
         
+        // 👈 بررسی اینکه آیا کارآموزی تکمیل شده است
+        $isCompleted = FinalGrade::where('student_id', $studentId)
+            ->where('is_completed', true)
+            ->exists();
+        
+        if ($isCompleted) {
+            return redirect()->route('student.work-reports.index')
+                ->with('error', 'دوره کارآموزی شما تکمیل شده است و نمی‌توانید گزارش جدید ثبت کنید.');
+        }
+        
         $internshipRequest = InternshipRequest::where('student_id', $studentId)
             ->where('status', 'approved')
             ->first();
@@ -71,6 +82,16 @@ class WorkReportController extends Controller
     public function store(Request $request)
     {
         $studentId = session('student_id');
+        
+        // 👈 بررسی اینکه آیا کارآموزی تکمیل شده است
+        $isCompleted = FinalGrade::where('student_id', $studentId)
+            ->where('is_completed', true)
+            ->exists();
+        
+        if ($isCompleted) {
+            return redirect()->route('student.work-reports.index')
+                ->with('error', 'دوره کارآموزی شما تکمیل شده است و نمی‌توانید گزارش جدید ثبت کنید.');
+        }
         
         $internshipRequest = InternshipRequest::where('student_id', $studentId)
             ->where('status', 'approved')

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\InternshipRequest;
-use App\Models\FinalGrade; // اضافه کن
+use App\Models\FinalGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -82,6 +82,25 @@ class StudentDashboardController extends Controller
         $finalGrade = FinalGrade::where('student_id', $studentId)->first();
         
         return view('student.grades', compact('student', 'finalGrade'));
+    }
+
+    // راهنمای کارآموزی
+    public function guide()
+    {
+        $studentId = session('student_id');
+        
+        if (!$studentId) {
+            return redirect()->route('login')->with('error', 'لطفاً ابتدا وارد شوید.');
+        }
+        
+        $student = Student::find($studentId);
+        
+        if (!$student) {
+            session()->flush();
+            return redirect()->route('login')->with('error', 'اطلاعات شما یافت نشد.');
+        }
+        
+        return view('student.guide', compact('student'));
     }
 
     // تغییر رمز عبور

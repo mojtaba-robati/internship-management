@@ -43,16 +43,6 @@
                             <input type="text" name="supervisor_phone" class="form-control" maxlength="11" placeholder="09xxxxxxxxx" required>
                             <small class="text-muted">11 رقم - ضروری</small>
                         </div>
-                        <div class="col-md-6">
-                            <label>تاریخ شروع</label>
-                            <input type="date" name="start_date" class="form-control">
-                            <small class="text-muted">اختیاری</small>
-                        </div>
-                        <div class="col-md-6">
-                            <label>تاریخ پایان</label>
-                            <input type="date" name="end_date" class="form-control">
-                            <small class="text-muted">اختیاری</small>
-                        </div>
                         <div class="col-12">
                             <label>توضیحات (چه کاری انجام می‌دهید؟) <span class="text-danger">*</span></label>
                             <textarea name="description" class="form-control" rows="4" required placeholder="شرح وظایف و فعالیت‌هایی که قرار است انجام دهید..."></textarea>

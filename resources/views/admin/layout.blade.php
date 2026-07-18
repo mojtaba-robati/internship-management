@@ -1,5 +1,9 @@
 @include('admin.components.sidebar')
 
+@php
+    use Morilog\Jalali\Jalalian;
+@endphp
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -38,17 +42,19 @@
             }
         }
         
-        /* کارت‌ها */
+        /* کارت‌ها - ساده و بدون رنگ */
         .card {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             margin-bottom: 20px;
             transition: transform 0.2s;
+            border: 1px solid #f0f0f0;
         }
         
         .card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
         
         .card-body {
@@ -61,28 +67,55 @@
             border: none;
         }
         
-        /* گرادیانت‌های رنگی */
-        .bg-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .bg-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
-        .bg-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .bg-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-card {
+            background: white;
+            border: 1px solid #e8ecf1;
+            border-radius: 16px;
+            padding: 20px 24px;
+            transition: all 0.3s ease;
+        }
         
-        .text-white { color: white; }
-        .text-white-50 { color: rgba(255,255,255,0.8); }
-        .text-muted { color: #6c757d; }
+        .stat-card:hover {
+            border-color: #c8d0d8;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            margin: 0;
+        }
         
         /* بدج (برچسب) */
         .badge {
             display: inline-block;
-            padding: 5px 12px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 500;
         }
         
-        .badge-info { background: #17a2b8; color: white; }
-        .badge-success { background: #28a745; color: white; }
-        .bg-opacity-25 { background: rgba(255,255,255,0.2); }
+        .badge-info { background: #e3f2fd; color: #0d47a1; }
+        .badge-success { background: #e8f5e9; color: #1b5e20; }
+        .badge-warning { background: #fff3e0; color: #e65100; }
         
         /* جدول */
         .table-responsive {
@@ -96,15 +129,16 @@
         
         .table th,
         .table td {
-            padding: 12px;
+            padding: 12px 16px;
             text-align: right;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .table thead th {
             background: #f8f9fa;
-            font-weight: bold;
-            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
         }
         
         .table tbody tr:hover {
@@ -114,26 +148,29 @@
         /* دکمه */
         .btn {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 6px 16px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.2s;
+            border: 1px solid #dee2e6;
+            background: white;
+            color: #495057;
         }
         
         .btn-sm {
-            padding: 4px 10px;
+            padding: 4px 12px;
             font-size: 12px;
         }
         
         .btn-outline-primary {
-            border: 1px solid #007bff;
-            color: #007bff;
+            border: 1px solid #6c7a89;
+            color: #6c7a89;
             background: white;
         }
         
         .btn-outline-primary:hover {
-            background: #007bff;
+            background: #6c7a89;
             color: white;
         }
         
@@ -172,12 +209,14 @@
         }
         
         .fw-bold {
-            font-weight: bold;
+            font-weight: 700;
         }
         
         .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 4px; }
         .mb-2 { margin-bottom: 8px; }
-        .mb-4 { margin-bottom: 20px; }
+        .mb-3 { margin-bottom: 16px; }
+        .mb-4 { margin-bottom: 24px; }
         
         .rounded-circle {
             border-radius: 50%;
@@ -187,9 +226,12 @@
             text-align: center;
         }
         
-        /* آیکون‌های ساده متنی */
-        [class*="bi-"] {
-            display: none;
+        .gap-2 {
+            gap: 8px;
+        }
+        
+        .gap-3 {
+            gap: 16px;
         }
         
         @media (max-width: 768px) {
@@ -206,75 +248,67 @@
         
         <div class="row mb-4">
             <div class="col">
-                <h2 class="fw-bold">📊 داشبورد مدیریت</h2>
-                <p class="text-muted">به پنل مدیریت خوش آمدید {{ session('admin_name') ?? 'مدیر گرامی' }} 👋</p>
+                <h2 class="fw-bold" style="color: #1a1a2e;">📊 داشبورد مدیریت</h2>
+                <p style="color: #6c757d; margin: 0;">به پنل مدیریت خوش آمدید {{ session('admin_name') ?? 'مدیر گرامی' }} 👋</p>
             </div>
         </div>
 
-        {{-- کارت‌های آماری (بدون آیکون Bootstrap) --}}
+        {{-- کارت‌های آماری (ساده و بدون رنگ) --}}
         <div class="row mb-4">
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-primary text-white">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-white-50 mb-2">تعداد کل دانش آموزان</h6>
-                                <h2 class="fw-bold mb-0">{{ number_format($totalStudents ?? 0) }}</h2>
-                            </div>
-                            <div class="bg-opacity-25 rounded-circle p-3" style="font-size: 32px;">👥</div>
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">تعداد کل دانش آموزان</div>
+                            <div class="stat-number">{{ number_format($totalStudents ?? 0) }}</div>
                         </div>
+                        <div class="stat-icon">👥</div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-success text-white">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-white-50 mb-2">دانش آموزان فعال</h6>
-                                <h2 class="fw-bold mb-0">{{ number_format($activeStudents ?? 0) }}</h2>
-                            </div>
-                            <div class="bg-opacity-25 rounded-circle p-3" style="font-size: 32px;">✅</div>
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">دانش آموزان فعال</div>
+                            <div class="stat-number">{{ number_format($activeStudents ?? 0) }}</div>
                         </div>
+                        <div class="stat-icon">✅</div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-warning text-white">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-white-50 mb-2">دانش آموزان غیرفعال</h6>
-                                <h2 class="fw-bold mb-0">{{ number_format($inactiveStudents ?? 0) }}</h2>
-                            </div>
-                            <div class="bg-opacity-25 rounded-circle p-3" style="font-size: 32px;">❌</div>
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">دانش آموزان غیرفعال</div>
+                            <div class="stat-number">{{ number_format($inactiveStudents ?? 0) }}</div>
                         </div>
+                        <div class="stat-icon">⛔</div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-6 col-lg-3">
-                <div class="card bg-info text-white">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-white-50 mb-2">تعداد رشته‌ها</h6>
-                                <h2 class="fw-bold mb-0">{{ number_format($totalMajors ?? 0) }}</h2>
-                            </div>
-                            <div class="bg-opacity-25 rounded-circle p-3" style="font-size: 32px;">📚</div>
+                <div class="stat-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-label">تعداد رشته‌ها</div>
+                            <div class="stat-number">{{ number_format($totalMajors ?? 0) }}</div>
                         </div>
+                        <div class="stat-icon">📚</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- جدول آخرین دانش آموزان (بدون نمودار) --}}
+        {{-- جدول آخرین دانش آموزان --}}
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0">🕒 آخرین دانش آموزان ثبت شده</h5>
+                    <h5 class="fw-bold mb-0" style="color: #1a1a2e;">🕒 آخرین دانش آموزان ثبت شده</h5>
                     <a href="{{ route('students.index') }}" class="btn btn-outline-primary btn-sm">
                         مشاهده همه ←
                     </a>
@@ -301,7 +335,12 @@
                                 <td dir="ltr">{{ $student->phone ?? '-' }}</td>
                                 <td><span class="badge badge-info">{{ $student->major ?? '-' }}</span></td>
                                 <td><span class="badge badge-success">{{ $student->grade ?? '-' }}</span></td>
-                                <td dir="ltr">{{ $student->created_at ? $student->created_at->format('Y/m/d') : '-' }}</td>
+                                <td dir="ltr">
+                                    @php
+                                        $jalaliDate = $student->created_at ? Jalalian::fromDateTime($student->created_at)->format('Y/m/d') : '-';
+                                    @endphp
+                                    {{ $jalaliDate }}
+                                </td>
                             </tr>
                             @empty
                             <tr>
@@ -320,13 +359,7 @@
 </div>
 
 <script>
-    // حذف کامل Chart.js و آیکون‌ها
     console.log('✅ صفحه بدون هیچ وابستگی خارجی لود شد');
-    
-    // پاک کردن هرگونه خطای احتمالی
-    if (typeof Chart !== 'undefined') {
-        delete window.Chart;
-    }
 </script>
 
 </body>

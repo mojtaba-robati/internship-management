@@ -1,5 +1,9 @@
 @include('admin.components.sidebar')
 
+@php
+    use Morilog\Jalali\Jalalian;
+@endphp
+
 <div class="content-wrapper">
     <div class="container-fluid p-4">
         
@@ -59,20 +63,23 @@
                                     <th>نام دانش‌آموز</th>
                                     <th>نام خانوادگی</th>
                                     <th>کد ملی</th>
-                                    <th>شرکت</th>
+                                    <th>محل کارآموزی</th>
                                     <th>تاریخ تخصیص</th>
                                     <th>عملیات</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($group['students'] as $index => $assign)
+                                    @php
+                                        $jalaliDate = $assign->created_at ? Jalalian::fromDateTime($assign->created_at)->format('Y/m/d') : '-';
+                                    @endphp
                                 <tr>
                                     <td class="text-center">{{ $index + 1 }}</td>
                                     <td class="fw-bold">{{ $assign->student_name }}</td>
                                     <td class="fw-bold">{{ $assign->student_lastname }}</td>
                                     <td dir="ltr">{{ $assign->national_code }}</td>
-                                    <td>{{ $assign->company_name }}</td>
-                                    <td dir="ltr">{{ $assign->created_at }}</td>
+                                    <td>{{ $assign->company_name ?? '-' }}</td>
+                                    <td dir="ltr">{{ $jalaliDate }}</td>
                                     <td class="text-center">
                                         <form action="{{ route('mentors.assignment.destroy', $assign->id) }}" method="POST" style="display: inline;">
                                             @csrf

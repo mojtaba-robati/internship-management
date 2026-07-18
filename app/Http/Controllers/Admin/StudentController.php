@@ -94,6 +94,7 @@ class StudentController extends Controller
             'national_code' => 'required|digits:10|unique:students,national_code,' . $id,
             'major'      => 'required',
             'grade'      => 'required',
+            'is_active'  => 'nullable|in:0,1',  // 👈 اضافه شد
         ]);
 
         $student->update([
@@ -103,6 +104,7 @@ class StudentController extends Controller
             'national_code' => $request->national_code,
             'major'      => $request->major,
             'grade'      => $request->grade,
+            'is_active'  => $request->is_active ?? 1,  // 👈 اضافه شد
         ]);
 
         return redirect()->route('students.index')->with('success', 'دانش‌آموز با موفقیت ویرایش شد.');

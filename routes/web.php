@@ -66,6 +66,7 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
         Route::get('/{id}', [AdminInternshipRequestController::class, 'show'])->name('show');
         Route::post('/{id}/approve', [AdminInternshipRequestController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [AdminInternshipRequestController::class, 'reject'])->name('reject');
+         Route::put('/{id}/reset', [AdminInternshipRequestController::class, 'reset'])->name('reset'); // 
         Route::delete('/{id}', [AdminInternshipRequestController::class, 'destroy'])->name('destroy');
         Route::delete('/bulk-delete', [AdminInternshipRequestController::class, 'bulkDelete'])->name('bulk-delete');
     });
@@ -121,6 +122,8 @@ Route::prefix('student')->middleware('student.auth')->name('student.')->group(fu
     Route::get('/profile', [StudentDashboardController::class, 'profile'])->name('profile');
     Route::get('/courses', [StudentDashboardController::class, 'courses'])->name('courses');
     Route::get('/grades', [StudentDashboardController::class, 'grades'])->name('grades');
+    // راهنمای کارآموزی دانش آموز
+    Route::get('/guide', [StudentDashboardController::class, 'guide'])->name('guide.index');
 
     
     Route::get('/grades', [StudentDashboardController::class, 'grades'])->name('grades.index');

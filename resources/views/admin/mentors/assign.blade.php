@@ -35,15 +35,15 @@
                             </select>
                         </div>
                         <div class="col-md-8">
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle"></i>
-                                دانش‌آموزان زیر را انتخاب کنید
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-info-circle text-primary me-1"></i>
+                                دانش‌آموزان زیر را انتخاب کنید (دانش‌آموزانی که قبلاً تخصیص داده شده‌اند غیرفعال هستند)
                             </div>
                         </div>
                     </div>
                     
                     <div class="table-responsive mt-4">
-                        <table class="table table-hover table-bordered align-middle">
+                        <table class="table table-hover table-bordered align-middle mb-0">
                             <thead class="table-dark">
                                 <tr>
                                     <th style="width: 40px;">
@@ -52,7 +52,6 @@
                                     <th>نام</th>
                                     <th>نام خانوادگی</th>
                                     <th>کد ملی</th>
-                                    <th>شرکت</th>
                                     <th>پایه</th>
                                     <th>رشته</th>
                                     <th>وضعیت تخصیص</th>
@@ -73,7 +72,6 @@
                                     <td class="fw-bold">{{ $student->first_name }}</td>
                                     <td class="fw-bold">{{ $student->last_name }}</td>
                                     <td dir="ltr">{{ $student->national_code }}</td>
-                                    <td>{{ $student->company_name ?? '-' }}</td>
                                     <td>{{ $student->grade }}</td>
                                     <td>{{ $student->major }}</td>
                                     <td class="text-center">
@@ -87,7 +85,7 @@
                                                 <i class="bi bi-clock-history"></i> تخصیص داده نشده
                                             </span>
                                         @endif
-                                    </td
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -124,7 +122,19 @@
 </style>
 
 <script>
-    document.getElementById('selectAll').addEventListener('change', function() {
-        document.querySelectorAll('.student-checkbox:not(:disabled)').forEach(cb => cb.checked = this.checked);
-    });
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.student-checkbox:not(:disabled)');
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            checkboxes.forEach(cb => cb.checked = this.checked);
+        });
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                const allChecked = Array.from(checkboxes).every(c => c.checked);
+                selectAll.checked = allChecked;
+            });
+        });
+    }
 </script>

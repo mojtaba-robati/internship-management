@@ -17,8 +17,6 @@
         <link href="{{ asset('assets/css/bootstrap-icons.min.css') }}" rel="stylesheet">
     @endif
     
-   
-    
     <style>
         body {
             background: #f5f6fa;
@@ -180,13 +178,11 @@
                             </label>
                             <select name="major" class="form-select" required>
                                 <option value="">انتخاب کنید</option>
-                                <option value="کامپیوتر" {{ $student->major == 'کامپیوتر' ? 'selected' : '' }}>کامپیوتر</option>
+                                <option value="شبکه و نرم افزار" {{ $student->major == 'شبکه و نرم افزار' ? 'selected' : '' }}>شبکه و نرم افزار</option>
                                 <option value="تاسیسات" {{ $student->major == 'تاسیسات' ? 'selected' : '' }}>تاسیسات</option>
-                                <option value="مکانیک" {{ $student->major == 'مکانیک' ? 'selected' : '' }}>مکانیک</option>
-                                <option value="برق" {{ $student->major == 'برق' ? 'selected' : '' }}>برق</option>
-                                <option value="معماری" {{ $student->major == 'معماری' ? 'selected' : '' }}>معماری</option>
-                                <option value="گرافیک" {{ $student->major == 'گرافیک' ? 'selected' : '' }}>گرافیک</option>
-                                <option value="حسابداری" {{ $student->major == 'حسابداری' ? 'selected' : '' }}>حسابداری</option>
+                                <option value="مکانیک خودرو" {{ $student->major == 'مکانیک خودرو' ? 'selected' : '' }}>مکانیک خودرو</option>
+                                <option value="الکتروتکنیک" {{ $student->major == 'الکتروتکنیک' ? 'selected' : '' }}>الکتروتکنیک</option>
+                                <option value="تاسیسات مکانیکی" {{ $student->major == 'تاسیسات مکانیکی' ? 'selected' : '' }}>تاسیسات مکانیکی</option>
                             </select>
                             <div class="invalid-feedback">لطفاً رشته را انتخاب کنید</div>
                         </div>

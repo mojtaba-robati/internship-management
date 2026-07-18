@@ -12,6 +12,7 @@ class FinalGrade extends Model
         'mentor_id',
         'grade',
         'mentor_note',
+        'is_completed',  // 👈 این خط رو اضافه کن
     ];
 
     public function student()

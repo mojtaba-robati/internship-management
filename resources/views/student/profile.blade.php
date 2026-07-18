@@ -1,5 +1,9 @@
 @include('student.components.sidebar')
 
+@php
+    use Morilog\Jalali\Jalalian;
+@endphp
+
 <div class="student-content-wrapper">
     <div class="container-fluid p-4">
         
@@ -21,7 +25,9 @@
                     <table class="table table-bordered">
                         <tbody>
                             @php
-                                // اطلاعات رو توی متغیر بریزیم برای دسترسی سریعتر
+                                // تاریخ ثبت نام به شمسی
+                                $jalaliDate = $student->created_at ? Jalalian::fromDateTime($student->created_at)->format('Y/m/d') : '-';
+                                
                                 $info = [
                                     'نام' => $student->first_name,
                                     'نام خانوادگی' => $student->last_name,
@@ -30,7 +36,7 @@
                                     'رشته تحصیلی' => $student->major,
                                     'پایه تحصیلی' => $student->grade,
                                     'وضعیت حساب' => $student->is_active == 1 ? '<span class="badge bg-success">فعال</span>' : '<span class="badge bg-danger">غیرفعال</span>',
-                                    'تاریخ ثبت نام' => $student->created_at ? $student->created_at->format('Y/m/d') : '-'
+                                    'تاریخ ثبت نام' => $jalaliDate
                                 ];
                             @endphp
                             
@@ -72,4 +78,3 @@
         font-weight: 500;
     }
 </style>
-
